@@ -63,16 +63,15 @@ class User:
         possible_schedule = Schedule()
         for subject_combination in filtered_set:
             possible_schedule.clear()
-            # print(possible_schedule.data)
             
             for code_plus_section in subject_combination:
                 [code, section] = code_plus_section.split("_")
                 schedule_to_add = subject_as_dict[code][int(section)]
                 possible_schedule.add_schedule(schedule_to_add)
-            #print(possible_schedule.data)
+            
             possible_schedule.compute_overlaps()
-
-            if possible_schedule.overlaps in self.schedule_options.keys():
-                self.schedule_options[possible_schedule.overlaps].append(possible_schedule)
+            new_schedule = Schedule(possible_schedule.data)       
+            if possible_schedule.overlaps in self.schedule_options:
+                self.schedule_options[possible_schedule.overlaps].append(new_schedule)
             else:
-                self.schedule_options[possible_schedule.overlaps] = [possible_schedule]
+                self.schedule_options[possible_schedule.overlaps] = [new_schedule]
