@@ -1,8 +1,8 @@
 import os
 import json
 
-from basic_structures.basic_structures_script import Schedule
-from basic_structures.basic_structures_script import Subject
+from basic_structures.basic_structures_definitions import Schedule
+from basic_structures.basic_structures_definitions import Subject
 from user_subroutines.code_plus_section_list_generator import generate_code_plus_section_list
 from user_subroutines.code_plus_section_set_filter import *
 from user_subroutines.subject_list_to_dictionary import subject_list_to_dict
