@@ -1,4 +1,4 @@
-#   Module name: basic_structures_script
+#   Module name: basic_structures_definitions
 #   from package: basic_structures
 #   Used Modules: vector sum
 #   Description: The goal of this file is to define the fundamental
