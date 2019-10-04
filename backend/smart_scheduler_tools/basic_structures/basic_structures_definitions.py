@@ -1,25 +1,18 @@
 #   Module name: basic_structures_script
 #   from package: basic_structures
-#   Used Modules: vector sum
+#   Used Modules: vector sum, empty_schedule_dict_generator
 #   Description: The goal of this file is to define the fundamental
 #   classes that laid the foundation of the application
-#
+#   Last Modified: 03/10/2019
 #   by: LFC & TAM
 
-from basic_structures.subroutines.vector_sum import vector_sum
+from smart_scheduler_tools.basic_structures.subroutines.vector_sum import vector_sum
+from smart_scheduler_tools.basic_structures.subroutines.empty_schedule_dict_generator import generate_empty_schedule_dict
 
 class Schedule:
     'Actual representation of a schedule. formatted as a dictionary'
-    default_schedule = {
-        'Mon': [0,0,0,0,0,0,0],
-        'Tue': [0,0,0,0,0,0,0],
-        'Wen': [0,0,0,0,0,0,0],
-        'Thu': [0,0,0,0,0,0,0],
-        'Fri': [0,0,0,0,0,0,0],
-        'Sat': [0,0,0,0,0,0,0]}
 
-
-    def __init__(self, data = default_schedule):
+    def __init__(self, data=generate_empty_schedule_dict()):
         self.data = data   # a dictionary with the schedule data formatted as "...data[day] = block list"
         self.overlaps = 0
         self.compute_overlaps()

@@ -1,3 +1,0 @@
-__all__ = ["basic_structures_definitions"]
-from basic_structures.basic_structures_definitions import Schedule
-from basic_structures.basic_structures_definitions import Subject
