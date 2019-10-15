@@ -1,6 +1,6 @@
-import user
+from smart_scheduler_tools.user import *
 
-Sopin = user.User("TAM")
+Sopin = User("TAM")
 Sopin.load_subject_from_json("DEF101")
 Sopin.load_subject_from_json("DEF102")
 Sopin.load_subject_from_json("DEF103")
