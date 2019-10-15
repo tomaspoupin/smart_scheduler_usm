@@ -1,9 +1,9 @@
-#   Module name: basic_structures_script
+#   Module name: basic_structures_definitions
 #   from package: basic_structures
 #   Used Modules: vector sum, empty_schedule_dict_generator
 #   Description: The goal of this file is to define the fundamental
-#   classes that laid the foundation of the application
-#   Last Modified: 03/10/2019
+#   classes that lay the foundation of the application
+#   Last Modified: 04/10/2019
 #   by: LFC & TAM
 
 from smart_scheduler_tools.basic_structures.subroutines.vector_sum import vector_sum

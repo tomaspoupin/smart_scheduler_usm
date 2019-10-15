@@ -1,0 +1,2 @@
+# Introducción
+Smart Scheduler USM como tal, es (de por momento) un proyecto desarrollado netamente en python 3, debido a esto, gran parte de la filosofía de diseño va dirigido en aprovechar en gran medida la
