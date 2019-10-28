@@ -1,41 +1,34 @@
 import tkinter as tk
 from tkinter import ttk
 
-import ROOT_AND_MAIN.USER_WINDOW.USER_FRAME.callbacks as callbacks
-from ROOT_AND_MAIN.USER_WINDOW.USER_FRAME.grid import grid
+import ROOT_AND_MAIN.SUBJECT_WINDOW.SUBJECT_FRAME.callbacks as callbacks
+from ROOT_AND_MAIN.SUBJECT_WINDOW.SUBJECT_FRAME.grid import grid
 
 
-class User_frame:
+class Subject_frame:
     def __init__(self, parent):
         self.frame = ttk.Frame(parent)
 
         self.labels = {
-            'new user': {
-                'text': 'Agregar usuario:'
+            'subject code': {
+                'text': 'Código:'
             },
-            'select user': {
-                'text': 'Seleccionar usuario:'
+            'section': {
+                'text': 'Paralelo:'
             }
         }
         self.entries = {
-            'new user': {
+            'subject code': {
+                'textvariable': tk.StringVar(self.frame)
+            },
+            'section': {
                 'textvariable': tk.StringVar(self.frame)
             }
         }
         self.buttons = {
-            'submit user': {
+            'submit schedule': {
                 'text': 'Ingresar',
-                'command': self.new_user_callback
-            },
-            "delete user": {
-                "text": "Eliminar",
-                "command": self.delete_user_button_callback
-            }
-        }
-        self.comboboxes = {
-            'users combobox': {
-                'items': ['Sopin', 'Luciano', 'Francisco', 'Mio'],
-                'textvariable': tk.StringVar(self.frame)
+                'command': self.new_schedule_option
             }
         }    
 
@@ -59,16 +52,10 @@ class User_frame:
                 text=self.buttons[button]['text'],
                 command=self.buttons[button]['command']
             )
-        # set comboboxes
-        for combobox in self.comboboxes:
-            self.comboboxes[combobox]['widget'] = ttk.Combobox(
-                self.frame,
-                textvariable=self.comboboxes[combobox]['textvariable'],
-                values=self.comboboxes[combobox]['items']
-            )
+
 
     def grid(self):
-        self.frame.grid(row=0, column=0)
+        self.frame.grid(row=1, column=0)
 
         for widget_type in grid:
             for widget_key in grid[widget_type]:
@@ -81,8 +68,5 @@ class User_frame:
                 )
 
     # CALLBACKS
-    def new_user_callback(self):
-        pass
-
-    def delete_user_button_callback(self):
+    def new_schedule_option(self):
         pass

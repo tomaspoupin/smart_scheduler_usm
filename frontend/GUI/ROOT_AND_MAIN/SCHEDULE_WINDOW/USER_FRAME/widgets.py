@@ -1,8 +1,8 @@
 import tkinter as tk
 from tkinter import ttk
 
-import ROOT_AND_MAIN.USER_WINDOW.USER_FRAME.callbacks as callbacks
-from ROOT_AND_MAIN.USER_WINDOW.USER_FRAME.grid import grid
+import ROOT_AND_MAIN.SCHEDULE_WINDOW.USER_FRAME.callbacks as callbacks
+from ROOT_AND_MAIN.SCHEDULE_WINDOW.USER_FRAME.grid import grid
 
 
 class User_frame:
@@ -10,34 +10,24 @@ class User_frame:
         self.frame = ttk.Frame(parent)
 
         self.labels = {
-            'new user': {
-                'text': 'Agregar usuario:'
-            },
-            'select user': {
-                'text': 'Seleccionar usuario:'
+            'user': {
+                'text': 'Usuario:'
             }
         }
-        self.entries = {
-            'new user': {
-                'textvariable': tk.StringVar(self.frame)
-            }
-        }
-        self.buttons = {
-            'submit user': {
-                'text': 'Ingresar',
-                'command': self.new_user_callback
-            },
-            "delete user": {
-                "text": "Eliminar",
-                "command": self.delete_user_button_callback
-            }
-        }
+
         self.comboboxes = {
-            'users combobox': {
+            'user': {
                 'items': ['Sopin', 'Luciano', 'Francisco', 'Mio'],
                 'textvariable': tk.StringVar(self.frame)
             }
-        }    
+        } 
+        self.buttons = {
+            'calculate': {
+                'text': 'Calcular Horarios',
+                'command': self.calculate_schedule_options
+            }
+        } 
+
 
     def set_widgets(self):
         # set labels
@@ -46,25 +36,21 @@ class User_frame:
                 self.frame, # parent
                 text=self.labels[label]['text'] # text
             )
-        # set entries
-        for entry in self.entries:
-            self.entries[entry]['widget'] = ttk.Entry(
-                self.frame,
-                textvariable=self.entries[entry]['textvariable']
-            )
-        # set buttons
-        for button in self.buttons:
-            self.buttons[button]['widget'] = ttk.Button(
-                self.frame,
-                text=self.buttons[button]['text'],
-                command=self.buttons[button]['command']
-            )
+
         # set comboboxes
         for combobox in self.comboboxes:
             self.comboboxes[combobox]['widget'] = ttk.Combobox(
                 self.frame,
                 textvariable=self.comboboxes[combobox]['textvariable'],
                 values=self.comboboxes[combobox]['items']
+            )
+
+        # set buttons
+        for button in self.buttons:
+            self.buttons[button]['widget'] = ttk.Button(
+                self.frame,
+                text=self.buttons[button]['text'],
+                command=self.buttons[button]['command']
             )
 
     def grid(self):
@@ -81,8 +67,5 @@ class User_frame:
                 )
 
     # CALLBACKS
-    def new_user_callback(self):
-        pass
-
-    def delete_user_button_callback(self):
+    def calculate_schedule_options(self):
         pass

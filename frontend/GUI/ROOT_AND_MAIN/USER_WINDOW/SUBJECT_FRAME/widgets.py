@@ -90,6 +90,7 @@ class Subject_frame:
                     )
 
     # CALLBACKS
+
     def subscribe_button_callback(self):
         pass
     

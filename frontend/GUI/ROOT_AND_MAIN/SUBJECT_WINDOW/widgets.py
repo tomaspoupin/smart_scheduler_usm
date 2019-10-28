@@ -6,4 +6,4 @@ class Subject_window():
         self.window = ttk.Frame(parent)
 
     def grid(self):
-        pass
+        self.window.grid()

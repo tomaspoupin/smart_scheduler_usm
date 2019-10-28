@@ -31,6 +31,13 @@ grid = {
             "sticky": 'w',
             'padx': 0,
             "pady": 10
+        },
+        "delete user": {
+            "row": 1,
+            "column": 2,
+            "sticky": 'w',
+            'padx': 0,
+            "pady": 0
         }
     },
     "comboboxes": {
