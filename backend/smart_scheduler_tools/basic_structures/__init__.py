@@ -1,3 +1,0 @@
-__all__ = ["basic_structures_definitions"]
-from smart_scheduler_tools.basic_structures.basic_structures_definitions import Schedule
-from smart_scheduler_tools.basic_structures.basic_structures_definitions import Subject

@@ -1,4 +1,4 @@
-from ROOT_AND_MAIN.SCHEDULE_WINDOW.SELECTION_FRAME.widgets import Selection_frame
+from GUI.ROOT_AND_MAIN.SCHEDULE_WINDOW.SELECTION_FRAME.widgets import Selection_frame
 
 def setup(parent):
     selection_frame = Selection_frame(parent)

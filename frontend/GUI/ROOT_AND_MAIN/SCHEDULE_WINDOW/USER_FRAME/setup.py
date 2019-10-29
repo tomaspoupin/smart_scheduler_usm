@@ -1,4 +1,4 @@
-from ROOT_AND_MAIN.SCHEDULE_WINDOW.USER_FRAME.widgets import User_frame 
+from GUI.ROOT_AND_MAIN.SCHEDULE_WINDOW.USER_FRAME.widgets import User_frame 
 
 def setup(parent):
     user_frame = User_frame(parent)

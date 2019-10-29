@@ -1,8 +1,8 @@
 import tkinter as tk
 from tkinter import ttk
 
-import ROOT_AND_MAIN.SCHEDULE_WINDOW.USER_FRAME.callbacks as callbacks
-from ROOT_AND_MAIN.SCHEDULE_WINDOW.USER_FRAME.grid import grid
+import GUI.ROOT_AND_MAIN.SCHEDULE_WINDOW.USER_FRAME.callbacks as callbacks
+from GUI.ROOT_AND_MAIN.SCHEDULE_WINDOW.USER_FRAME.grid import grid
 
 
 class User_frame:

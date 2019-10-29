@@ -1,8 +1,8 @@
 import tkinter as tk
 from tkinter import ttk
 
-import ROOT_AND_MAIN.USER_WINDOW.SUBJECT_FRAME.callbacks as callbacks
-from ROOT_AND_MAIN.USER_WINDOW.SUBJECT_FRAME.grid import grid
+import GUI.ROOT_AND_MAIN.USER_WINDOW.SUBJECT_FRAME.callbacks as callbacks
+from GUI.ROOT_AND_MAIN.USER_WINDOW.SUBJECT_FRAME.grid import grid
 
 class Subject_frame:
     def __init__(self, parent):
