@@ -1,11 +1,13 @@
 import tkinter as tk
 from tkinter import ttk
+from tkinter import messagebox
 
 import GUI.ROOT_AND_MAIN.USER_WINDOW.SUBJECT_FRAME.callbacks as callbacks
 from GUI.ROOT_AND_MAIN.USER_WINDOW.SUBJECT_FRAME.grid import grid
 
 class Subject_frame:
     def __init__(self, parent):
+        self.parent = parent
         self.frame = ttk.Frame(parent)
 
         self.labels = {
@@ -34,7 +36,7 @@ class Subject_frame:
                 "scrollbar": ttk.Scrollbar(self.frame, orient=tk.VERTICAL)
             },
             "possible subjects": {
-                "items": ['DEF101', 'DEF102', 'DEF103', 'DEF104', 'DEF105'],
+                "items": callbacks.get_possible_subjects_list(),
                 "listvariable": tk.StringVar(self.frame),
                 "height": 5,
                 "scrollbar": ttk.Scrollbar(self.frame, orient=tk.VERTICAL)
@@ -63,8 +65,10 @@ class Subject_frame:
                 listvariable=self.lists[current_list]['listvariable']
             )
             # scrollbar config
-            self.lists[current_list]['widget']['yscrollcommand'] = self.lists[current_list]['scrollbar'].set
-            self.lists[current_list]['scrollbar']['command'] = self.lists[current_list]['widget'].yview
+            self.lists[current_list]['widget']['yscrollcommand'] = \
+                self.lists[current_list]['scrollbar'].set
+            self.lists[current_list]['scrollbar']['command'] = \
+                self.lists[current_list]['widget'].yview
 
     def grid(self):
         self.frame.grid(row=1, column=0)
@@ -92,7 +96,16 @@ class Subject_frame:
     # CALLBACKS
 
     def subscribe_button_callback(self):
-        pass
+        selection = \
+            self.lists['possible subjects']['widget'].get(tk.ANCHOR)
+        if not selection:
+            messagebox.showinfo(
+                title='Inscribir asignatura',
+                message='No hay asignaturas para inscribir'
+            )
+            return
+        else:
+            pass
     
     def unsubscribe_button_callback(self):
         pass

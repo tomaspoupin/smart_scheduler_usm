@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from tkinter import messagebox
 
 import GUI.ROOT_AND_MAIN.USER_WINDOW.USER_FRAME.callbacks as callbacks
 from GUI.ROOT_AND_MAIN.USER_WINDOW.USER_FRAME.grid import grid
@@ -7,6 +8,7 @@ from GUI.ROOT_AND_MAIN.USER_WINDOW.USER_FRAME.grid import grid
 
 class User_frame:
     def __init__(self, parent):
+        self.parent = parent
         self.frame = ttk.Frame(parent)
 
         self.labels = {
@@ -34,10 +36,10 @@ class User_frame:
         }
         self.comboboxes = {
             'users combobox': {
-                'items': ['Sopin', 'Luciano', 'Francisco', 'Mio'],
+                'items': callbacks.get_user_list(),
                 'textvariable': tk.StringVar(self.frame)
             }
-        }    
+        } 
 
     def set_widgets(self):
         # set labels
@@ -64,8 +66,16 @@ class User_frame:
             self.comboboxes[combobox]['widget'] = ttk.Combobox(
                 self.frame,
                 textvariable=self.comboboxes[combobox]['textvariable'],
-                values=self.comboboxes[combobox]['items']
+                values=self.comboboxes[combobox]['items'],
+                state='readonly'
             )
+            # Set default value for combobox
+            if not self.comboboxes[combobox]['items']:
+                self.comboboxes[combobox]['textvariable'].set('')
+            else:
+                self.comboboxes[combobox]['textvariable'].set(
+                    self.comboboxes[combobox]['items'][0]
+                )  
 
     def grid(self):
         self.frame.grid(row=0, column=0)
@@ -82,7 +92,63 @@ class User_frame:
 
     # CALLBACKS
     def new_user_callback(self):
-        pass
+        new_user = self.entries['new user']['textvariable'].get().strip().capitalize()
+        if new_user in self.comboboxes['users combobox']['items']:
+            messagebox.showinfo(
+                title='Nuevo Usuario',
+                message='Este usuario ya existe'
+            )
+            self.entries['new user']['textvariable'].set('')
+            return
+
+        new_user = callbacks.validate_user(new_user)
+
+        if isinstance(new_user, str):
+            anwser = messagebox.askyesno(
+                message='Estas segure que quieres agregar a {}?'.format(new_user),
+                title='Agregar nuevo usuario'
+            )
+            if anwser:
+                self.comboboxes['users combobox']['items'].append(new_user)
+                self.comboboxes['users combobox']['widget']['values'] = \
+                    self.comboboxes['users combobox']['items']
+                self.comboboxes['users combobox']['textvariable'].set(new_user)
+                self.entries['new user']['textvariable'].set('')
+                callbacks.add_new_user(new_user)
+                
+            else:
+                return
+
+        else:
+            messagebox.showinfo(
+                title='Nuevo Usuario',
+                message=new_user[0]
+            )
+            self.entries['new user']['textvariable'].set('')
 
     def delete_user_button_callback(self):
-        pass
+        user_to_delete = self.comboboxes['users combobox']['textvariable'].get()
+        if not user_to_delete:
+            messagebox.showinfo(
+                title='Eliminar usuario',
+                message='No hay usuarios para eliminar'
+            )
+        else:
+            anwser = messagebox.askyesno(
+                message='Estas segure que quieres eliminar a {}?'.format(user_to_delete),
+                title='Eliminar usuario'
+            )
+            if anwser:
+                self.comboboxes['users combobox']['items'].remove(user_to_delete)
+                self.comboboxes['users combobox']['widget']['values'] = \
+                    self.comboboxes['users combobox']['items']
+
+                if not self.comboboxes['users combobox']['items']:
+                    self.comboboxes['users combobox']['textvariable'].set('')
+                else:
+                    self.comboboxes['users combobox']['textvariable'].set(
+                        self.comboboxes['users combobox']['items'][0]
+                    )
+                callbacks.remove_user(user_to_delete)
+            else:
+                pass
