@@ -9,7 +9,10 @@ from GUI.ROOT_AND_MAIN.USER_WINDOW.USER_FRAME.grid import grid
 class User_frame:
     def __init__(self, parent):
         self.parent = parent
-        self.frame = ttk.Frame(parent)
+        self.frame = ttk.Frame(parent.frame)
+
+        # state variables
+        self.current_user = None
 
         self.labels = {
             'new user': {
@@ -75,7 +78,16 @@ class User_frame:
             else:
                 self.comboboxes[combobox]['textvariable'].set(
                     self.comboboxes[combobox]['items'][0]
-                )  
+                )
+                if combobox == 'users combobox':
+                    self.current_user = \
+                        self.comboboxes[combobox]['textvariable'].get()
+        self.set_subscribed_subject_list_to_current_user()
+
+        # Set users combobox selection event
+        self.comboboxes['users combobox']['widget'].bind(
+            "<<ComboboxSelected>>", self.user_selected_callback
+            )
 
     def grid(self):
         self.frame.grid(row=0, column=0)
@@ -114,7 +126,10 @@ class User_frame:
                     self.comboboxes['users combobox']['items']
                 self.comboboxes['users combobox']['textvariable'].set(new_user)
                 self.entries['new user']['textvariable'].set('')
+                self.current_user = \
+                    self.comboboxes['users combobox']['textvariable'].get()
                 callbacks.add_new_user(new_user)
+                self.set_subscribed_subject_list_to_current_user()
                 
             else:
                 return
@@ -145,10 +160,31 @@ class User_frame:
 
                 if not self.comboboxes['users combobox']['items']:
                     self.comboboxes['users combobox']['textvariable'].set('')
+                    self.current_user = None
                 else:
                     self.comboboxes['users combobox']['textvariable'].set(
                         self.comboboxes['users combobox']['items'][0]
                     )
+                    self.current_user = \
+                        self.comboboxes['users combobox']['textvariable'].get()
                 callbacks.remove_user(user_to_delete)
+                self.set_subscribed_subject_list_to_current_user()
+
             else:
                 pass
+    
+    def user_selected_callback(self, ve):
+        self.current_user = \
+            self.comboboxes['users combobox']['textvariable'].get()
+        self.set_subscribed_subject_list_to_current_user()
+    
+    def set_subscribed_subject_list_to_current_user(self):
+        user_subject_list = []
+        if self.current_user is not None:
+            user_subject_list = callbacks.get_user_subjects_list(self.current_user)
+
+        self.parent.children['subject_child'].lists['subscribed subjects']['items'] = \
+            user_subject_list
+        self.parent.children['subject_child'].lists['subscribed subjects']['listvariable'].set(
+            user_subject_list
+            )

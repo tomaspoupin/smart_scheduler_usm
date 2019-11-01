@@ -4,6 +4,7 @@ from tkinter import ttk
 class Root_and_main:
     def __init__(self):
         self.root = tk.Tk()
+        self.root.title("Smart Scheduler USM")
         self.main_frame = ttk.Frame(self.root)
         self.window_manager = ttk.Notebook(self.main_frame)
 

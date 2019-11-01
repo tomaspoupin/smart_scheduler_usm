@@ -13,7 +13,7 @@ def setup():
     window2 = subject_window.setup(root_and_main_container.window_manager)
     window3 = schedule_window.setup(root_and_main_container.window_manager)
 
-    root_and_main_container.window_manager.add(window1, text="Usuario")
+    root_and_main_container.window_manager.add(window1.frame, text="Usuario")
     root_and_main_container.window_manager.add(window2, text="Ramos")
     root_and_main_container.window_manager.add(window3, text="Horarios")
 

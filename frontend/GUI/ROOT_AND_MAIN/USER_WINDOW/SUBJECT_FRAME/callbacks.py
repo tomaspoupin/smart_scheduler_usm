@@ -10,11 +10,53 @@ abs_subjects_database_path = os.path.join(BASE_DIR, rel_subjects_database_path)
 rel_users_database_path = "../../../../../database_files/users_database.json"
 abs_users_database_path = os.path.join(BASE_DIR, rel_users_database_path)
 
-def subscribe_subject(stringvar):
-    pass
+def subscribe_subject(user, subject):
+    users = {}
+    try:
+        with open(abs_users_database_path) as users_database:
+            users = json.load(users_database)
+    except FileNotFoundError:
+        return -2
+    except ValueError: #json fails to read
+        return -2
+    except Exception:
+        return -1
 
-def unsubscribe_subject(stringvar):
-    pass
+    users[user]['subjects'].append(subject)
+    users[user]['subjects'].sort()
+
+    try:
+        with open(abs_users_database_path, 'w') as users_database:
+            json.dump(users, users_database, sort_keys=True, indent=4)
+    except Exception:
+        return -1
+    return 1
+
+def unsubscribe_subject(user, subject):
+    users = {}
+    try:
+        with open(abs_users_database_path) as users_database:
+            users = json.load(users_database)
+    except FileNotFoundError:
+        return -2
+    except ValueError: #json fails to read
+        return -2
+    except Exception:
+        return -1
+
+    # Remove the subject
+    if subject not in users[user]['subjects']:
+        return -2 # Means that database is not in sync with GUI
+
+    users[user]['subjects'].remove(subject)
+    users[user]['subjects'].sort()
+    # Write back to database
+    try:
+        with open(abs_users_database_path, 'w') as users_database:
+            json.dump(users, users_database, sort_keys=True, indent=4)
+    except Exception:
+        return -1
+    return 1
 
 def get_possible_subjects_list():
     subjects = {}

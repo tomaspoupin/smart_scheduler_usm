@@ -8,7 +8,7 @@ from GUI.ROOT_AND_MAIN.USER_WINDOW.SUBJECT_FRAME.grid import grid
 class Subject_frame:
     def __init__(self, parent):
         self.parent = parent
-        self.frame = ttk.Frame(parent)
+        self.frame = ttk.Frame(parent.frame)
 
         self.labels = {
             "subscribed subjects": {
@@ -58,7 +58,9 @@ class Subject_frame:
             )
         
         for current_list in self.lists:
-            self.lists[current_list]['listvariable'].set(self.lists[current_list]['items'])
+            self.lists[current_list]['listvariable'].set(
+                self.lists[current_list]['items']
+                )
             self.lists[current_list]['widget'] = tk.Listbox(
                 self.frame,
                 height=self.lists[current_list]['height'],
@@ -100,12 +102,41 @@ class Subject_frame:
             self.lists['possible subjects']['widget'].get(tk.ANCHOR)
         if not selection:
             messagebox.showinfo(
-                title='Inscribir asignatura',
+                title='Inscribir Asignatura',
                 message='No hay asignaturas para inscribir'
-            )
-            return
+            ) 
+        elif selection in self.lists['subscribed subjects']['items']:
+            messagebox.showinfo(
+                title='Inscribir Asignatura',
+                message='Esta asignatura ya fue inscrita'
+            )          
         else:
-            pass
+            self.lists['subscribed subjects']['items'].append(selection)
+            self.lists['subscribed subjects']['listvariable'].set(
+                self.lists['subscribed subjects']['items']
+            )
+            callbacks.subscribe_subject(
+                self.get_current_user(),
+                selection
+            )
     
     def unsubscribe_button_callback(self):
-        pass
+        selection = \
+            self.lists['subscribed subjects']['widget'].get(tk.ANCHOR)
+        if not selection:
+            messagebox.showinfo(
+                title='Inscribir Asignatura',
+                message='No hay asignaturas para desinscribir'
+            )
+        else:
+            self.lists['subscribed subjects']['items'].remove(selection)
+            self.lists['subscribed subjects']['listvariable'].set(
+                self.lists['subscribed subjects']['items']
+            )
+            callbacks.unsubscribe_subject(
+                self.get_current_user(),
+                selection
+                )
+
+    def get_current_user(self):
+        return self.parent.children['user_child'].current_user

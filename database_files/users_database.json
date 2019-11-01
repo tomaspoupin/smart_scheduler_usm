@@ -1,1 +1,20 @@
-{}
+{
+    "Francisco": {
+        "schedule options": {},
+        "subjects": []
+    },
+    "Mio": {
+        "schedule options": {},
+        "subjects": [
+            "DEF101"
+        ]
+    },
+    "Sopin": {
+        "schedule options": {},
+        "subjects": [
+            "DEF101",
+            "DEF102",
+            "DEF103"
+        ]
+    }
+}

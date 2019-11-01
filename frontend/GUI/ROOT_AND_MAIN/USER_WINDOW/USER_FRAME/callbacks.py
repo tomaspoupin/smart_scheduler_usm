@@ -33,7 +33,7 @@ def add_new_user(user_name):
     }
     try:
         with open(abs_users_database_path, 'w') as users_database:
-            json.dump(users, users_database, indent=4)
+            json.dump(users, users_database, sort_keys=True, indent=4)
     except Exception:
         return -1
     return 1
@@ -54,7 +54,7 @@ def remove_user(user_name):
     # Write back to database
     try:
         with open(abs_users_database_path, 'w') as users_database:
-            json.dump(users, users_database, indent=4)
+            json.dump(users, users_database, sort_keys=True, indent=4)
     except Exception:
         return -1
     return 1
@@ -71,3 +71,16 @@ def get_user_list():
     except:
         return -1
     return list(users.keys())
+
+def get_user_subjects_list(user):
+    users = {}
+    try:
+        with open(abs_users_database_path) as users_database:
+            users = json.load(users_database)
+    except FileNotFoundError:
+        return -2
+    except ValueError:
+        return -2
+    except:
+        return -1
+    return users[user]['subjects']
