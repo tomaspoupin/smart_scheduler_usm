@@ -7,7 +7,8 @@ from GUI.ROOT_AND_MAIN.SUBJECT_WINDOW.SCHEDULE_FRAME.grid import grid
 
 class Schedule_frame:
     def __init__(self, parent):
-        self.frame = ttk.Frame(parent)
+        self.parent = parent
+        self.frame = ttk.Frame(parent.frame)
 
         self.labels = {
             'block_label': {
@@ -17,8 +18,8 @@ class Schedule_frame:
             }
         }
 
-        days_dictionary = {'monday':'Lunes', 'tuesday':'Martes', 'wednesday':'Miércioles', 
-                          'thursday':'Jueves', 'friday':'Viernes', 'saturday':'Sábado'}
+        days_dictionary = {'Mon':'Lunes', 'Tue':'Martes', 'Wen':'Miércoles', 
+                          'Thu':'Jueves', 'Fri':'Viernes', 'Sat':'Sábado'}
         for day in days_dictionary:
             self.labels[day]={'text':days_dictionary[day],
                               'bg': '#033558',  #siga's blue
@@ -31,19 +32,20 @@ class Schedule_frame:
                                   'bg': '#033558',  #siga's blue
                                   'fg': "white"}
 
-        self.schedule_dict = {'monday':    [tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar()],
-                              'tuesday':   [tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar()],
-                              'wednesday': [tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar()],
-                              'thursday':  [tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar()],
-                              'friday':    [tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar()],
-                              'saturday':  [tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar()]}
+        self.schedule_dict = {
+            'Mon': [tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar()],
+            'Tue': [tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar()],
+            'Wen': [tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar()],
+            'Thu': [tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar()],
+            'Fri': [tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar()],
+            'Sat': [tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar(),tk.IntVar()]}
 
         self.checkboxes = {}
 
         for day in days_dictionary:
             for block in blocks_dictionary:
                 self.checkboxes[day+'_'+block] = {
-                    'check_variable':self.schedule_dict[day][int(block[-1])-1] #tk.IntVar()
+                    'check_variable':self.schedule_dict[day][int(block[-1])-1] #0
                 } 
 
     def set_widgets(self):
@@ -78,6 +80,15 @@ class Schedule_frame:
                     pady=grid[widget_type][widget_key]["pady"]
                 )
 
-#    # CALLBACKS
-#    def new_schedule_option(self):
-#        pass
+    # CALLBACKS
+    def load_schedule(self, subject, section):
+        current_schedule = callbacks.load_schedule(subject, section)
+        for day in self.schedule_dict:
+            for block_index in range(len(day)):
+                self.schedule_dict[day][block_index].set(current_schedule[day][block_index])
+    
+    def clear_schedule(self):
+        for day in self.schedule_dict:
+            for block_index in range(len(day)):
+                self.schedule_dict[day][block_index].set(0)
+

@@ -1,13 +1,13 @@
 import tkinter as tk
 from tkinter import ttk
 
-import GUI.ROOT_AND_MAIN.SCHEDULE_WINDOW.SELECTION_FRAME.callbacks as callbacks
+import GUI.ROOT_AND_MAIN.SCHEDULE_WINDOW.SELECTION_FRAME.widget_callbacks as widget_callbacks
 from GUI.ROOT_AND_MAIN.SCHEDULE_WINDOW.SELECTION_FRAME.grid import grid
 
 
 class Selection_frame:
     def __init__(self, parent):
-        self.frame = ttk.Frame(parent)
+        self.frame = ttk.Frame(parent.frame)
 
         self.labels = {
             'overlaps': {
@@ -20,11 +20,11 @@ class Selection_frame:
 
         self.comboboxes = {
             'overlaps': {
-                'items': ['0','1','2','3'],
+                'items': widget_callbacks.get_overlap_list(),
                 'textvariable': tk.StringVar(self.frame)
             },
             'options': {
-                'items': ['1','2','3','4','5'],
+                'items': widget_callbacks.get_option_list(),
                 'textvariable': tk.StringVar(self.frame)
             }
         }
@@ -40,7 +40,8 @@ class Selection_frame:
             self.comboboxes[combobox]['widget'] = ttk.Combobox(
                 self.frame,
                 textvariable=self.comboboxes[combobox]['textvariable'],
-                values=self.comboboxes[combobox]['items']
+                values=self.comboboxes[combobox]['items'],
+                width = 28
             )
             
     def grid(self):
@@ -55,7 +56,3 @@ class Selection_frame:
                     padx=grid[widget_type][widget_key]["padx"],
                     pady=grid[widget_type][widget_key]["pady"]
                 )
-
-#    # CALLBACKS
-#    def new_schedule_option(self):
-#        pass

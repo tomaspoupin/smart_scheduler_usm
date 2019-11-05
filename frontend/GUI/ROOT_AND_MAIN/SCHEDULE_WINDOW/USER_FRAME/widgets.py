@@ -1,13 +1,15 @@
 import tkinter as tk
 from tkinter import ttk
 
-import GUI.ROOT_AND_MAIN.SCHEDULE_WINDOW.USER_FRAME.callbacks as callbacks
+import GUI.ROOT_AND_MAIN.SCHEDULE_WINDOW.USER_FRAME.JSON_callbacks as json_callbacks
+import GUI.ROOT_AND_MAIN.SCHEDULE_WINDOW.USER_FRAME.widget_callbacks as widget_callbacks
 from GUI.ROOT_AND_MAIN.SCHEDULE_WINDOW.USER_FRAME.grid import grid
 
 
 class User_frame:
     def __init__(self, parent):
-        self.frame = ttk.Frame(parent)
+        self.frame = ttk.Frame(parent.frame)
+        self.current_user = None
 
         self.labels = {
             'user': {
@@ -17,14 +19,14 @@ class User_frame:
 
         self.comboboxes = {
             'user': {
-                'items': ['Sopin', 'Luciano', 'Francisco', 'Mio'],
+                'items': json_callbacks.get_user_list(),
                 'textvariable': tk.StringVar(self.frame)
             }
         } 
         self.buttons = {
             'calculate': {
                 'text': 'Calcular Horarios',
-                'command': self.calculate_schedule_options
+                'command': widget_callbacks.calculate_schedule_options
             }
         } 
 
@@ -42,9 +44,23 @@ class User_frame:
             self.comboboxes[combobox]['widget'] = ttk.Combobox(
                 self.frame,
                 textvariable=self.comboboxes[combobox]['textvariable'],
-                values=self.comboboxes[combobox]['items']
+                values=self.comboboxes[combobox]['items'],
+                state='readonly'
             )
-
+            # Set default value for combobox
+            if not self.comboboxes[combobox]['items']:
+                self.comboboxes[combobox]['textvariable'].set('')
+            else:
+                self.comboboxes[combobox]['textvariable'].set(
+                    self.comboboxes[combobox]['items'][0]
+                )
+                if combobox == 'user':
+                    self.current_user = \
+                        self.comboboxes[combobox]['textvariable'].get()
+            # Set users combobox selection event
+            self.comboboxes['user']['widget'].bind(
+            "<<ComboboxSelected>>", widget_callbacks.user_selected_callback
+            )
         # set buttons
         for button in self.buttons:
             self.buttons[button]['widget'] = ttk.Button(
@@ -66,6 +82,3 @@ class User_frame:
                     pady=grid[widget_type][widget_key]["pady"]
                 )
 
-    # CALLBACKS
-    def calculate_schedule_options(self):
-        pass

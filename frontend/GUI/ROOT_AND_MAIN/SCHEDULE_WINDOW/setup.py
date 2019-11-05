@@ -6,11 +6,15 @@ import GUI.ROOT_AND_MAIN.SCHEDULE_WINDOW.SCHEDULE_FRAME.setup as schedule_frame
 
 def setup(parent):
     schedule_window = Schedule_window(parent)
-
-    user_frame.setup(schedule_window.window)
-    selection_frame.setup(schedule_window.window)
-    schedule_frame.setup(schedule_window.window)
+    schedule_window.add_children(
+        user_child=user_frame.init(schedule_window),
+        selection_child=selection_frame.init(schedule_window),
+        schedule_child=schedule_frame.init(schedule_window)
+    )
+    user_frame.setup()
+    selection_frame.setup()
+    schedule_frame.setup()
     
     schedule_window.grid()
 
-    return schedule_window.window
+    return schedule_window

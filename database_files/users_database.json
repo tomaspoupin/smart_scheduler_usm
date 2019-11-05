@@ -3,18 +3,12 @@
         "schedule options": {},
         "subjects": []
     },
-    "Mio": {
+    "Luciano": {
         "schedule options": {},
-        "subjects": [
-            "DEF101"
-        ]
+        "subjects": []
     },
-    "Sopin": {
+    "Tom\u00e1s": {
         "schedule options": {},
-        "subjects": [
-            "DEF101",
-            "DEF102",
-            "DEF103"
-        ]
+        "subjects": []
     }
 }

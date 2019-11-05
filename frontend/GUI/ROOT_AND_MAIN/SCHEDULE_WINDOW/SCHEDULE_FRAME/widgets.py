@@ -1,14 +1,22 @@
 import tkinter as tk
 from tkinter import ttk
 
-import GUI.ROOT_AND_MAIN.SCHEDULE_WINDOW.SCHEDULE_FRAME.callbacks as callbacks
+import GUI.ROOT_AND_MAIN.SCHEDULE_WINDOW.SCHEDULE_FRAME.widget_callbacks as widget_callbacks
 from GUI.ROOT_AND_MAIN.SCHEDULE_WINDOW.SCHEDULE_FRAME.grid import grid
 
 
 class Schedule_frame:
     def __init__(self, parent):
-        self.frame = ttk.Frame(parent)
+        self.frame = ttk.Frame(parent.frame)
         
+        self.current_schedule_dict = {
+            'Mon': [1,0,0,2,1,0,0],
+            'Tue': [0,1,0,1,1,1,0],
+            'Wen': [0,0,0,1,0,0,0],
+            'Thu': [0,0,0,1,2,1,1],
+            'Fri': [1,1,0,0,0,0,0],
+            'Sat': [0,0,0,0,0,0,0]}
+
         # siga's orange => #ff9900
         self.labels = {
             'block_label': {
@@ -18,8 +26,8 @@ class Schedule_frame:
             }
         }
 
-        days_dictionary = {'monday':'Lunes', 'tuesday':'Martes', 'wednesday':'Miércioles', 
-                          'thursday':'Jueves', 'friday':'Viernes', 'saturday':'Sábado'}
+        days_dictionary = {'Mon':'Lunes', 'Tue':'Martes', 'Wen':'Miércoles', 
+                          'Thu':'Jueves', 'Fri':'Viernes', 'Sat':'Sábado'}
         for day in days_dictionary:
             self.labels[day]={'text':days_dictionary[day],
                               'bg': '#033558',  #siga's blue
@@ -31,6 +39,24 @@ class Schedule_frame:
             self.labels[block] = {'text':blocks_dictionary[block],
                                   'bg': '#033558',  #siga's blue
                                   'fg': "white"}
+        
+        
+        #week_days = ['Mon', 'Tue', 'Wen', 'Thu', 'Fri', 'Sat']
+        block_list = ['block1', 'block2', 'block3', 'block4', 'block5', 'block6', 'block7']
+        for day in self.current_schedule_dict.keys():
+            #day_index = week_days.index(day)
+            for block in block_list:
+                block_index = block_list.index(block)
+                if self.current_schedule_dict[day][block_index]==0:
+                    block_color = "white"
+                elif self.current_schedule_dict[day][block_index]==1:
+                    block_color = "#ff9900"
+                else:
+                    block_color = "#ff6600"
+                self.labels[day+'_'+block] = {'text':'',
+                                  'bg': block_color,  #siga's blue
+                                  'fg': "white"}
+
 
 
     def set_widgets(self):

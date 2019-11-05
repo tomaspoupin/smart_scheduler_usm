@@ -32,13 +32,13 @@ class Subject_frame:
             "subscribed subjects": {
                 "items": [],
                 "listvariable": tk.StringVar(self.frame),
-                "height": 5,
+                "height": 7,
                 "scrollbar": ttk.Scrollbar(self.frame, orient=tk.VERTICAL)
             },
             "possible subjects": {
                 "items": callbacks.get_possible_subjects_list(),
                 "listvariable": tk.StringVar(self.frame),
-                "height": 5,
+                "height": 7,
                 "scrollbar": ttk.Scrollbar(self.frame, orient=tk.VERTICAL)
             }
         }
@@ -140,3 +140,8 @@ class Subject_frame:
 
     def get_current_user(self):
         return self.parent.children['user_child'].current_user
+    
+    def refresh_possible_subjects_list(self):
+        self.lists["possible subjects"]["items"] = \
+            callbacks.get_possible_subjects_list()
+        

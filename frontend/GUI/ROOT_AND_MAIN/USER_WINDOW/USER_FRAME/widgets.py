@@ -5,7 +5,6 @@ from tkinter import messagebox
 import GUI.ROOT_AND_MAIN.USER_WINDOW.USER_FRAME.callbacks as callbacks
 from GUI.ROOT_AND_MAIN.USER_WINDOW.USER_FRAME.grid import grid
 
-
 class User_frame:
     def __init__(self, parent):
         self.parent = parent
@@ -117,7 +116,7 @@ class User_frame:
 
         if isinstance(new_user, str):
             anwser = messagebox.askyesno(
-                message='Estas segure que quieres agregar a {}?'.format(new_user),
+                message='¿Estas segure que quieres agregar a {}?'.format(new_user),
                 title='Agregar nuevo usuario'
             )
             if anwser:
@@ -150,7 +149,7 @@ class User_frame:
             )
         else:
             anwser = messagebox.askyesno(
-                message='Estas segure que quieres eliminar a {}?'.format(user_to_delete),
+                message='¿Estas segure que quieres eliminar a {}?'.format(user_to_delete),
                 title='Eliminar usuario'
             )
             if anwser:

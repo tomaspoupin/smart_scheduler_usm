@@ -15,7 +15,23 @@ grid = {
             "pady": 0
         }
     },
-    "entries": {
+#    "entries": {
+#        'subject code': {
+#            'row': 1,
+#            'column': 0,
+#            'sticky': 'wens',
+#            'padx': 5,
+#            'pady': 0
+#        },
+#        "section": {
+#            "row": 1,
+#            "column": 1,
+#            "sticky": 'wens',
+#            "padx": 0,
+#            "pady": 0
+#        }
+#    },
+    "comboboxes": {
         'subject code': {
             'row': 1,
             'column': 0,
@@ -35,6 +51,13 @@ grid = {
         "submit schedule": {
             "row": 1,
             "column": 2,
+            "sticky": 'wens',
+            'padx': 0,
+            "pady": 0
+        },
+        "delete schedule": {
+            "row": 1,
+            "column": 3,
             "sticky": 'wens',
             'padx': 0,
             "pady": 0

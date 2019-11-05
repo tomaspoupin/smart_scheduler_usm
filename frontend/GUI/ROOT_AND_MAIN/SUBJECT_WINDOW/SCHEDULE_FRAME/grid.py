@@ -1,3 +1,4 @@
+
 grid = {
     'labels': {
         'block_label': {
@@ -12,7 +13,7 @@ grid = {
 }
 
 
-week_days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
+week_days = ['Mon', 'Tue', 'Wen', 'Thu', 'Fri', 'Sat']
 block_list = ['block1', 'block2', 'block3', 'block4', 'block5', 'block6', 'block7']
 
 for day_index in range(len(week_days)): # range 0 -> 5
