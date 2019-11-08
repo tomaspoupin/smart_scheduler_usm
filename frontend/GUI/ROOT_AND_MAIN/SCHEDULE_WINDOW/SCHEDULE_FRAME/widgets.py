@@ -10,12 +10,21 @@ class Schedule_frame:
         self.frame = ttk.Frame(parent.frame)
         
         self.current_schedule_dict = {
-            'Mon': [1,0,0,2,1,0,0],
-            'Tue': [0,1,0,1,1,1,0],
-            'Wen': [0,0,0,1,0,0,0],
-            'Thu': [0,0,0,1,2,1,1],
-            'Fri': [1,1,0,0,0,0,0],
+            'Mon': [0,0,0,0,0,0,0],
+            'Tue': [0,0,0,0,0,0,0],
+            'Wen': [0,0,0,0,0,0,0],
+            'Thu': [0,0,0,0,0,0,0],
+            'Fri': [0,0,0,0,0,0,0],
             'Sat': [0,0,0,0,0,0,0]}
+        
+        self.current_schedule_labels = {
+            'Mon': ['','','','','','',''],
+            'Tue': ['','','','','','',''],
+            'Wen': ['','','','','','',''],
+            'Thu': ['','','','','','',''],
+            'Fri': ['','','','','','',''],
+            'Sat': ['','','','','','','']
+            }
 
         # siga's orange => #ff9900
         self.labels = {
@@ -41,10 +50,8 @@ class Schedule_frame:
                                   'fg': "white"}
         
         
-        #week_days = ['Mon', 'Tue', 'Wen', 'Thu', 'Fri', 'Sat']
         block_list = ['block1', 'block2', 'block3', 'block4', 'block5', 'block6', 'block7']
         for day in self.current_schedule_dict.keys():
-            #day_index = week_days.index(day)
             for block in block_list:
                 block_index = block_list.index(block)
                 if self.current_schedule_dict[day][block_index]==0:
@@ -53,9 +60,11 @@ class Schedule_frame:
                     block_color = "#ff9900"
                 else:
                     block_color = "#ff6600"
+                
                 self.labels[day+'_'+block] = {'text':'',
                                   'bg': block_color,  #siga's blue
                                   'fg': "white"}
+                
 
 
 
@@ -70,6 +79,12 @@ class Schedule_frame:
                 width= 9
             )
 
+    def update_widgets(self):
+        parameters_list = ['text', 'bg', 'fg']
+        for label in self.labels:
+            for parameter in parameters_list:
+                self.labels[label]['widget'][parameter] = \
+                    self.labels[label][parameter]
 
     def grid(self):
         self.frame.grid(row=2, column=0)
@@ -83,3 +98,22 @@ class Schedule_frame:
                     padx=grid[widget_type][widget_key]["padx"],
                     pady=grid[widget_type][widget_key]["pady"]
                 )
+
+    def update_schedule_colors(self):
+        block_list = ['block1', 'block2', 'block3', 'block4', 'block5', 'block6', 'block7']
+        for day in self.current_schedule_dict.keys():
+            for block in block_list:
+                block_index = block_list.index(block)
+                if self.current_schedule_dict[day][block_index]==0:
+                    block_color = "white"
+                elif self.current_schedule_dict[day][block_index]==1:
+                    block_color = "#ff9900"
+                else:
+                    block_color = "#ff6600"
+                self.labels[day+'_'+block]['bg'] = block_color
+                # self.labels[day+'_'+block]['text'] = \
+                #     self.current_schedule_labels[day][block_index]
+
+        self.update_widgets()
+        self.grid()
+        print(self.current_schedule_dict)

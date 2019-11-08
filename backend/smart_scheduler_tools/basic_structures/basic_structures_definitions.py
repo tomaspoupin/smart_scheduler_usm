@@ -6,6 +6,7 @@
 #   Last Modified: 04/10/2019
 #   by: LFC & TAM
 
+import copy
 from smart_scheduler_tools.basic_structures.subroutines.vector_sum import vector_sum
 from smart_scheduler_tools.basic_structures.subroutines.empty_schedule_dict_generator import generate_empty_schedule_dict
 
@@ -13,7 +14,7 @@ class Schedule:
     'Actual representation of a schedule. formatted as a dictionary'
 
     def __init__(self, data=generate_empty_schedule_dict()):
-        self.data = data   # a dictionary with the schedule data formatted as "...data[day] = block list"
+        self.data = copy.deepcopy(data)   # a dictionary with the schedule data formatted as "...data[day] = block list"
         self.overlaps = 0
         self.compute_overlaps()
 
@@ -41,13 +42,14 @@ class Schedule:
     # by: TAM
     def load_from_dict(self, schedule_dict):
         if self.data.keys() == schedule_dict.keys():
-            self.data = schedule_dict
+            self.data = copy.deepcopy(schedule_dict)
             self.compute_overlaps()
 
     # In: the schedule object
     # Out: resets the data of the schedule object
     # by: TAM & LFC
     def clear(self):
+        del self.data
         self.data = {
         'Mon': [0,0,0,0,0,0,0],
         'Tue': [0,0,0,0,0,0,0],
@@ -56,24 +58,11 @@ class Schedule:
         'Fri': [0,0,0,0,0,0,0],
         'Sat': [0,0,0,0,0,0,0]}
 
+    def get_data(self):
+        return copy.deepcopy(self.data)
+
 class Subject:
     'Actual representation of a subject.'
     def __init__(self, code, schedule_options):
         self.code = code # Ex: DEF101
-        self.schedule_options = schedule_options # dictionary of Schedule objects with sections as keys
-
-    # In: the subject object, a schedule to add or remove, flag that indicate insertion or removal
-    # Out: the subject with its schedule options updated
-    # by: TAM
-    def change_schedule_option(self, option, new_state):
-        if (len(option.keys()) == 1):
-            option_section = list(option.keys())[0]
-            for section in self.schedule_options:
-                if section == option_section:
-                    if new_state == 1:
-                        self.schedule_options[section] = option[section] # option[section] is a Schedule object
-                    elif new_state == 0:
-                        self.schedule_options.pop(section)
-                    return
-            if new_state == 1:
-                self.schedule_options[option_section] = option[option_section]
+        self.schedule_options = copy.deepcopy(schedule_options) # dictionary of Schedule objects with sections as keys

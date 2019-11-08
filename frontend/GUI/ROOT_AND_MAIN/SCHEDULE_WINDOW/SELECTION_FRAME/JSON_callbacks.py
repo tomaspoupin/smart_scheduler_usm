@@ -10,4 +10,4 @@ abs_subjects_database_path = os.path.join(BASE_DIR, rel_subjects_database_path)
 rel_users_database_path = "../../../../../database_files/users_database.json"
 abs_users_database_path = os.path.join(BASE_DIR, rel_users_database_path)
 
-# READ FUNCTIONS
+# READ FUNCTION

@@ -7,6 +7,7 @@
 #   name, posible schedules.
 #   Last Modified: 03/10/2019
 #   by: LFC & TAM
+import copy
 
 from smart_scheduler_tools.basic_structures.basic_structures_definitions import Schedule
 from smart_scheduler_tools.basic_structures.basic_structures_definitions import Subject
@@ -20,23 +21,8 @@ class User:
     'User who contains info about wanted subjects.'
     def __init__(self, name, subjects=[]):
         self.name = name
-        self.subjects = subjects # subject's list
+        self.subjects = list(subjects) # subject's list
         self.schedule_options = {} # the keys are the number of overlaps in the possible schedules
-    
-    # In: self user, subject object, add/remove flag
-    # Out: the self.subjects list is updated
-    # by LFC & TAM
-    def change_subjects(self, subject, new_state):
-        length = len(self.subjects)
-        for i in range(length):
-            if self.subjects[i].code == subject.code:
-                if new_state == 0: # remove the subject
-                    self.subjects.pop(i)
-                elif new_state == 1:
-                    self.subjects[i] = subject
-                return
-        if new_state == 1: # add the subject
-            self.subjects.append(subject)
 
     # In: self user, subject code (Ex: DEF101)
     # Out: it stores in self.subjects list the subject taken from
@@ -57,12 +43,16 @@ class User:
             return
         new_subject = Subject(code, new_schedule_options)
         self.subjects.append(new_subject)
-
+        
     # In: self user
     # Out: fills the self.schedule_options dictionary with possible schedules, organized
     # by the amount of overlaps (the keys of the dictionary are the overlaps)
     # by LFC & TAM
     def compute_possible_schedules(self):
+        if self.schedule_options:
+            return
+        if not self.subjects:
+            return
         code_plus_section_list = generate_code_plus_section_list(self.subjects)
         power_set = compute_power_set(code_plus_section_list)
         filtered_set = filter_set(power_set, len(self.subjects))
@@ -84,3 +74,57 @@ class User:
             else:
                 self.schedule_options[possible_schedule.overlaps] = [new_schedule]
             possible_schedule.clear()
+
+    def clear_subjects(self):
+        del self.subjects
+        self.subjects = []
+
+    def clear_schedule_options(self):
+        del self.schedule_options
+        self.schedule_options = {}
+
+    def get_subjects_list(self):
+        subject_list = self.subjects.copy()
+        subject_list.sort()
+        return subject_list
+
+    def get_overlaps_list(self):
+        overlaps_list = list(self.schedule_options.keys())
+        overlaps_list.sort()
+        return overlaps_list
+
+    def get_options_list(self, overlaps):
+        options_list = []
+        if self.schedule_options:
+            if int(overlaps) in self.schedule_options:
+                for i in range(len(self.schedule_options[int(overlaps)])):
+                    options_list.append(i+1)
+                options_list.sort()
+        return options_list
+
+    def get_schedule_as_dict(self, overlaps, option):
+        option = int(option)
+        overlaps = int(overlaps)
+        if self.schedule_options:
+            if overlaps in self.schedule_options:
+                if option > 0 and option <= len(self.schedule_options[overlaps]):
+                    schedule_dict = \
+                        self.schedule_options[overlaps][option-1].get_data()
+                        
+                    return schedule_dict
+        return {}
+
+    def get_name(self):
+        return self.name
+
+    def has_schedule_options(self):
+        if self.schedule_options:
+            return True
+        else:
+            return False
+
+    def has_subjects(self):
+        if self.subjects:
+            return True
+        else:
+            return False

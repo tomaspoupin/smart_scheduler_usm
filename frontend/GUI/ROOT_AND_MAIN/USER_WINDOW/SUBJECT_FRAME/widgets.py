@@ -71,6 +71,9 @@ class Subject_frame:
                 self.lists[current_list]['scrollbar'].set
             self.lists[current_list]['scrollbar']['command'] = \
                 self.lists[current_list]['widget'].yview
+        
+        # bind events
+        self.frame.bind("<Visibility>", self.update_frame)
 
     def grid(self):
         self.frame.grid(row=1, column=0)
@@ -144,4 +147,9 @@ class Subject_frame:
     def refresh_possible_subjects_list(self):
         self.lists["possible subjects"]["items"] = \
             callbacks.get_possible_subjects_list()
-        
+        self.lists['possible subjects']['listvariable'].set(
+            self.lists["possible subjects"]["items"]
+        )
+
+    def update_frame(self, ve):
+        self.refresh_possible_subjects_list()

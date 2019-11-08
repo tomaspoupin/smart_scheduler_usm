@@ -11,9 +11,9 @@ def setup(parent):
         selection_child=selection_frame.init(schedule_window),
         schedule_child=schedule_frame.init(schedule_window)
     )
-    user_frame.setup()
     selection_frame.setup()
     schedule_frame.setup()
+    user_frame.setup()
     
     schedule_window.grid()
 

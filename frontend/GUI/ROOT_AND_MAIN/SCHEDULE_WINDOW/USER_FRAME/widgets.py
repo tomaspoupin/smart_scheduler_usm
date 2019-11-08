@@ -4,12 +4,15 @@ from tkinter import ttk
 import GUI.ROOT_AND_MAIN.SCHEDULE_WINDOW.USER_FRAME.JSON_callbacks as json_callbacks
 import GUI.ROOT_AND_MAIN.SCHEDULE_WINDOW.USER_FRAME.widget_callbacks as widget_callbacks
 from GUI.ROOT_AND_MAIN.SCHEDULE_WINDOW.USER_FRAME.grid import grid
+from smart_scheduler_tools import user as user_tools
 
 
 class User_frame:
     def __init__(self, parent):
         self.frame = ttk.Frame(parent.frame)
+        self.parent = parent
         self.current_user = None
+        self.users = []
 
         self.labels = {
             'user': {
@@ -22,13 +25,14 @@ class User_frame:
                 'items': json_callbacks.get_user_list(),
                 'textvariable': tk.StringVar(self.frame)
             }
-        } 
+        }
+
         self.buttons = {
             'calculate': {
                 'text': 'Calcular Horarios',
-                'command': widget_callbacks.calculate_schedule_options
+                'command': self.calculate_schedule_options
             }
-        } 
+        }
 
 
     def set_widgets(self):
@@ -57,10 +61,7 @@ class User_frame:
                 if combobox == 'user':
                     self.current_user = \
                         self.comboboxes[combobox]['textvariable'].get()
-            # Set users combobox selection event
-            self.comboboxes['user']['widget'].bind(
-            "<<ComboboxSelected>>", widget_callbacks.user_selected_callback
-            )
+
         # set buttons
         for button in self.buttons:
             self.buttons[button]['widget'] = ttk.Button(
@@ -68,6 +69,15 @@ class User_frame:
                 text=self.buttons[button]['text'],
                 command=self.buttons[button]['command']
             )
+        
+        # events binding
+        self.comboboxes['user']['widget'].bind(
+            "<<ComboboxSelected>>",
+            self.user_selected_callback
+            )
+        self.frame.bind("<Visibility>", self.update_frame)
+
+        self.set_schedule_options_to_current_user()
 
     def grid(self):
         self.frame.grid(row=0, column=0)
@@ -82,3 +92,75 @@ class User_frame:
                     pady=grid[widget_type][widget_key]["pady"]
                 )
 
+    def calculate_schedule_options(self):
+        if self.current_user is None:
+            return
+        for user in self.users:
+            if self.current_user == user.get_name():
+                widget_callbacks.calculate_schedule_options(user)
+                self.set_schedule_options_to_current_user()
+                return
+        new_user = user_tools.User(self.current_user)
+        self.users.append(new_user)
+        widget_callbacks.calculate_schedule_options(new_user)
+        self.set_schedule_options_to_current_user()
+
+    def user_selected_callback(self, ve):
+        self.current_user = \
+            self.comboboxes['user']['textvariable'].get()
+        self.set_schedule_options_to_current_user()
+        print(self.current_user)
+    
+    def set_schedule_options_to_current_user(self):
+        self.parent.children['selection_child'].comboboxes['overlaps']['items'] = []
+        self.parent.children['selection_child'].comboboxes['overlaps']['widget']['values'] = \
+            self.parent.children['selection_child'].comboboxes['overlaps']['items']
+        self.parent.children['selection_child'].comboboxes['overlaps']['textvariable'].set('')
+
+        self.parent.children['selection_child'].comboboxes['options']['items'] = []
+        self.parent.children['selection_child'].comboboxes['options']['widget']['values'] = \
+            self.parent.children['selection_child'].comboboxes['options']['items']
+        self.parent.children['selection_child'].comboboxes['options']['textvariable'].set('')
+        
+        self.parent.children['schedule_child'].current_schedule_dict = {
+            'Mon': [0,0,0,0,0,0,0],
+            'Tue': [0,0,0,0,0,0,0],
+            'Wen': [0,0,0,0,0,0,0],
+            'Thu': [0,0,0,0,0,0,0],
+            'Fri': [0,0,0,0,0,0,0],
+            'Sat': [0,0,0,0,0,0,0]}
+        self.parent.children['schedule_child'].update_schedule_colors()
+        if self.current_user is None:
+            return
+        for user in self.users:
+            if self.current_user == user.get_name():
+                if user.has_schedule_options():
+                    self.parent.children['selection_child'].comboboxes['overlaps']['items'] = \
+                        user.get_overlaps_list()
+                    self.parent.children['selection_child'].comboboxes['overlaps']['widget']['values'] = \
+                        self.parent.children['selection_child'].comboboxes['overlaps']['items']
+                    self.parent.children['selection_child'].comboboxes['overlaps']['textvariable'].set(
+                        self.parent.children['selection_child'].comboboxes['overlaps']['items'][0]
+                    )
+
+                    self.parent.children['selection_child'].comboboxes['options']['items'] = \
+                        user.get_options_list(
+                            self.parent.children['selection_child'].comboboxes['overlaps']['items'][0]
+                            )
+                    self.parent.children['selection_child'].comboboxes['options']['widget']['values'] = \
+                        self.parent.children['selection_child'].comboboxes['options']['items']
+                    self.parent.children['selection_child'].comboboxes['options']['textvariable'].set(
+                        self.parent.children['selection_child'].comboboxes['options']['items'][0]    
+                    )
+                    self.parent.children['schedule_child'].current_schedule_dict = \
+                        user.get_schedule_as_dict(
+                            self.parent.children['selection_child'].comboboxes['overlaps']['textvariable'].get(),
+                            self.parent.children['selection_child'].comboboxes['options']['textvariable'].get()
+                        )
+                    self.parent.children['schedule_child'].update_schedule_colors()          
+                return
+    
+    def update_frame(self, ve):
+        self.comboboxes['user']['items'] = json_callbacks.get_user_list()
+        self.comboboxes['user']['widget']['values'] = \
+            self.comboboxes['user']['items']
