@@ -10,8 +10,8 @@ class Root_and_main:
 
     def grid(self):
         self.root.grid()
-        self.main_frame.grid()
-        self.window_manager.grid()
+        self.main_frame.grid(sticky='wens')
+        self.window_manager.grid(sticky='wens')
     
     def run(self):
         self.root.mainloop()

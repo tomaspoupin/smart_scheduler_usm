@@ -16,6 +16,8 @@ from smart_scheduler_tools.user_subroutines.code_plus_section_set_filter import 
 from smart_scheduler_tools.user_subroutines.code_plus_section_set_filter import filter_set
 from smart_scheduler_tools.user_subroutines.subject_list_to_dictionary import subject_list_to_dict
 from smart_scheduler_tools.user_subroutines.dict_from_json import get_dict_from_json_subject_database
+from smart_scheduler_tools.user_subroutines.metadata import create_metadata
+from smart_scheduler_tools.user_subroutines.metadata import add_metadatas
 
 class User:
     'User who contains info about wanted subjects.'
@@ -57,22 +59,30 @@ class User:
         power_set = compute_power_set(code_plus_section_list)
         filtered_set = filter_set(power_set, len(self.subjects))
 
-        subject_as_dict = subject_list_to_dict(self.subjects)
+        subjects_as_dict = subject_list_to_dict(self.subjects)
 
         possible_schedule = Schedule()
         for subject_combination in filtered_set:
-            
+            possible_schedule_metadata = create_metadata()
             for code_plus_section in subject_combination:
                 [code, section] = code_plus_section.split("_")
-                schedule_to_add = subject_as_dict[code][int(section)]
+                schedule_to_add = subjects_as_dict[code][int(section)]
+                possible_schedule_metadata = add_metadatas(
+                    possible_schedule_metadata,
+                    create_metadata(schedule_to_add, code, section)
+                )
                 possible_schedule.add_schedule(schedule_to_add)
-            
             possible_schedule.compute_overlaps()
-            new_schedule = Schedule(possible_schedule.data)       
+            new_schedule = Schedule(possible_schedule.get_dict())       
             if possible_schedule.overlaps in self.schedule_options:
-                self.schedule_options[possible_schedule.overlaps].append(new_schedule)
+                self.schedule_options[possible_schedule.overlaps].append(
+                    (new_schedule, possible_schedule_metadata)
+                    )
             else:
-                self.schedule_options[possible_schedule.overlaps] = [new_schedule]
+                self.schedule_options[possible_schedule.overlaps] = [(
+                    new_schedule,
+                    possible_schedule_metadata
+                )]
             possible_schedule.clear()
 
     def clear_subjects(self):
@@ -95,9 +105,10 @@ class User:
 
     def get_options_list(self, overlaps):
         options_list = []
+        overlaps = int(overlaps)
         if self.schedule_options:
-            if int(overlaps) in self.schedule_options:
-                for i in range(len(self.schedule_options[int(overlaps)])):
+            if overlaps in self.schedule_options:
+                for i in range(len(self.schedule_options[overlaps])):
                     options_list.append(i+1)
                 options_list.sort()
         return options_list
@@ -109,9 +120,21 @@ class User:
             if overlaps in self.schedule_options:
                 if option > 0 and option <= len(self.schedule_options[overlaps]):
                     schedule_dict = \
-                        self.schedule_options[overlaps][option-1].get_data()
+                        self.schedule_options[overlaps][option-1][0].get_dict()
                         
                     return schedule_dict
+        return {}
+
+    def get_option_metadata_as_dict(self, overlaps, option):
+        option = int(option)
+        overlaps = int(overlaps)
+        if self.schedule_options:
+            if overlaps in self.schedule_options:
+                if option > 0 and option <= len(self.schedule_options[overlaps]):
+                    metadata_dict = \
+                        self.schedule_options[overlaps][option-1][1]
+                        
+                    return metadata_dict
         return {}
 
     def get_name(self):

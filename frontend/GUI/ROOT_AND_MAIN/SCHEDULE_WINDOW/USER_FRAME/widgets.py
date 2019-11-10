@@ -99,17 +99,19 @@ class User_frame:
             if self.current_user == user.get_name():
                 widget_callbacks.calculate_schedule_options(user)
                 self.set_schedule_options_to_current_user()
+                self.parent.children['selection_child'].update_schedule()
                 return
         new_user = user_tools.User(self.current_user)
         self.users.append(new_user)
         widget_callbacks.calculate_schedule_options(new_user)
         self.set_schedule_options_to_current_user()
+        self.parent.children['selection_child'].update_schedule()        
 
     def user_selected_callback(self, ve):
         self.current_user = \
             self.comboboxes['user']['textvariable'].get()
         self.set_schedule_options_to_current_user()
-        print(self.current_user)
+        self.parent.children['selection_child'].update_schedule()        
     
     def set_schedule_options_to_current_user(self):
         self.parent.children['selection_child'].comboboxes['overlaps']['items'] = []
@@ -122,14 +124,10 @@ class User_frame:
             self.parent.children['selection_child'].comboboxes['options']['items']
         self.parent.children['selection_child'].comboboxes['options']['textvariable'].set('')
         
-        self.parent.children['schedule_child'].current_schedule_dict = {
-            'Mon': [0,0,0,0,0,0,0],
-            'Tue': [0,0,0,0,0,0,0],
-            'Wen': [0,0,0,0,0,0,0],
-            'Thu': [0,0,0,0,0,0,0],
-            'Fri': [0,0,0,0,0,0,0],
-            'Sat': [0,0,0,0,0,0,0]}
-        self.parent.children['schedule_child'].update_schedule_colors()
+        self.buttons['calculate']['text'] = 'Calcular Horarios'
+        self.buttons['calculate']['widget']['text'] = self.buttons['calculate']['text']
+
+        self.parent.children['selection_child'].update_schedule()
         if self.current_user is None:
             return
         for user in self.users:
@@ -142,6 +140,8 @@ class User_frame:
                     self.parent.children['selection_child'].comboboxes['overlaps']['textvariable'].set(
                         self.parent.children['selection_child'].comboboxes['overlaps']['items'][0]
                     )
+                    self.buttons['calculate']['text'] = 'Recalcular Horarios'
+                    self.buttons['calculate']['widget']['text'] = self.buttons['calculate']['text']
 
                     self.parent.children['selection_child'].comboboxes['options']['items'] = \
                         user.get_options_list(
@@ -152,12 +152,6 @@ class User_frame:
                     self.parent.children['selection_child'].comboboxes['options']['textvariable'].set(
                         self.parent.children['selection_child'].comboboxes['options']['items'][0]    
                     )
-                    self.parent.children['schedule_child'].current_schedule_dict = \
-                        user.get_schedule_as_dict(
-                            self.parent.children['selection_child'].comboboxes['overlaps']['textvariable'].get(),
-                            self.parent.children['selection_child'].comboboxes['options']['textvariable'].get()
-                        )
-                    self.parent.children['schedule_child'].update_schedule_colors()          
                 return
     
     def update_frame(self, ve):

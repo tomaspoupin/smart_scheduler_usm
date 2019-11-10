@@ -89,7 +89,7 @@ class User_frame:
             )
 
     def grid(self):
-        self.frame.grid(row=0, column=0)
+        self.frame.grid(row=0, column=0, sticky='wens')
 
         for widget_type in grid:
             for widget_key in grid[widget_type]:

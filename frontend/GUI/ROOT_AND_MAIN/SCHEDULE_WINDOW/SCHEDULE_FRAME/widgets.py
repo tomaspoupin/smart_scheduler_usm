@@ -8,7 +8,8 @@ from GUI.ROOT_AND_MAIN.SCHEDULE_WINDOW.SCHEDULE_FRAME.grid import grid
 class Schedule_frame:
     def __init__(self, parent):
         self.frame = ttk.Frame(parent.frame)
-        
+        self.parent = parent
+
         self.current_schedule_dict = {
             'Mon': [0,0,0,0,0,0,0],
             'Tue': [0,0,0,0,0,0,0],
@@ -17,7 +18,7 @@ class Schedule_frame:
             'Fri': [0,0,0,0,0,0,0],
             'Sat': [0,0,0,0,0,0,0]}
         
-        self.current_schedule_labels = {
+        self.current_schedule_metadata = {
             'Mon': ['','','','','','',''],
             'Tue': ['','','','','','',''],
             'Wen': ['','','','','','',''],
@@ -99,21 +100,69 @@ class Schedule_frame:
                     pady=grid[widget_type][widget_key]["pady"]
                 )
 
-    def update_schedule_colors(self):
+    def set_current_schedule_dict(self):
+        active_user = None
+        overlaps = self.parent.children['selection_child'].comboboxes['overlaps']['textvariable'].get()
+        option = self.parent.children['selection_child'].comboboxes['options']['textvariable'].get()
+        for user in self.parent.children['user_child'].users:
+            if self.parent.children['user_child'].current_user == user.get_name():
+                active_user = user
+                break
+        if active_user is not None and overlaps and option:
+            self.current_schedule_dict = \
+                active_user.get_schedule_as_dict(
+                    overlaps,
+                    option
+                )
+        else:
+            self.current_schedule_dict = {
+            'Mon': [0,0,0,0,0,0,0],
+            'Tue': [0,0,0,0,0,0,0],
+            'Wen': [0,0,0,0,0,0,0],
+            'Thu': [0,0,0,0,0,0,0],
+            'Fri': [0,0,0,0,0,0,0],
+            'Sat': [0,0,0,0,0,0,0]}           
+
+    def set_current_metadata_dict(self):
+        active_user = None
+        overlaps = self.parent.children['selection_child'].comboboxes['overlaps']['textvariable'].get()
+        option = self.parent.children['selection_child'].comboboxes['options']['textvariable'].get()
+        for user in self.parent.children['user_child'].users:
+            if self.parent.children['user_child'].current_user == user.get_name():
+                active_user = user
+                break
+        if active_user is not None and overlaps and option:
+            self.current_schedule_metadata = \
+                active_user.get_option_metadata_as_dict(
+                    overlaps,
+                    option
+                )      
+        else:
+            self.current_schedule_metadata = {
+            'Mon': ['','','','','','',''],
+            'Tue': ['','','','','','',''],
+            'Wen': ['','','','','','',''],
+            'Thu': ['','','','','','',''],
+            'Fri': ['','','','','','',''],
+            'Sat': ['','','','','','','']}
+
+    def update_schedule_gui(self):
         block_list = ['block1', 'block2', 'block3', 'block4', 'block5', 'block6', 'block7']
         for day in self.current_schedule_dict.keys():
             for block in block_list:
                 block_index = block_list.index(block)
+                subject_options = \
+                    self.current_schedule_metadata[day][block_index].split(' ')
+                text = ''
                 if self.current_schedule_dict[day][block_index]==0:
                     block_color = "white"
                 elif self.current_schedule_dict[day][block_index]==1:
                     block_color = "#ff9900"
+                    text = subject_options[0]
                 else:
                     block_color = "#ff6600"
-                self.labels[day+'_'+block]['bg'] = block_color
-                # self.labels[day+'_'+block]['text'] = \
-                #     self.current_schedule_labels[day][block_index]
+                    text='{} TOPE(s)'.format(len(subject_options)-1)
 
+                self.labels[day+'_'+block]['bg'] = block_color
+                self.labels[day+'_'+block]['text'] = text
         self.update_widgets()
-        self.grid()
-        print(self.current_schedule_dict)

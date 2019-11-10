@@ -76,7 +76,7 @@ class Subject_frame:
         self.frame.bind("<Visibility>", self.update_frame)
 
     def grid(self):
-        self.frame.grid(row=1, column=0)
+        self.frame.grid(row=1, column=0, sticky='wens')
 
         for widget_type in grid:
             for widget_key in grid[widget_type]:

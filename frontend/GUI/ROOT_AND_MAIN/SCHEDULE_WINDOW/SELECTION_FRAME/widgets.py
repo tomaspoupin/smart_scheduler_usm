@@ -42,7 +42,7 @@ class Selection_frame:
                 self.frame,
                 textvariable=self.comboboxes[combobox]['textvariable'],
                 values=self.comboboxes[combobox]['items'],
-                width = 28,
+                width = 25,
                 state='readonly'
             )
         # bind events
@@ -97,24 +97,6 @@ class Selection_frame:
         self.update_schedule()
 
     def update_schedule(self):
-        active_user = None
-        for user in self.parent.children['user_child'].users:
-            if self.parent.children['user_child'].current_user == user.get_name():
-                active_user = user
-                break
-        if active_user is not None:
-            self.parent.children['schedule_child'].current_schedule_dict = \
-                active_user.get_schedule_as_dict(
-                    self.comboboxes['overlaps']['textvariable'].get(),
-                    self.comboboxes['options']['textvariable'].get()
-                )
-            # for day in self.parent.children['schedule_child'].current_schedule_dict:
-            #     for block_index in range(len(day)):
-            #         if day[block_index] == 0:
-            #             self.parent.children['schedule_child'].current_schedule_labels[day][block_index] = ''
-            #         elif day[block_index] == 1:   
-            #             pass
-            #         else:
-            #             self.parent.children['schedule_child'].current_schedule_labels[day][block_index] = \
-            #                 '{} ramos'.format(day[block_index])
-            self.parent.children['schedule_child'].update_schedule_colors()
+        self.parent.children['schedule_child'].set_current_schedule_dict()
+        self.parent.children['schedule_child'].set_current_metadata_dict()
+        self.parent.children['schedule_child'].update_schedule_gui()

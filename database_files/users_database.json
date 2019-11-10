@@ -2,9 +2,11 @@
     "Francisco": {
         "schedule options": {},
         "subjects": [
+            "DEF101",
             "DEF102",
             "DEF103",
-            "DEF104"
+            "DEF104",
+            "DEF107"
         ]
     },
     "Luciano": {
@@ -13,7 +15,9 @@
     },
     "Mio": {
         "schedule options": {},
-        "subjects": []
+        "subjects": [
+            "DEF101"
+        ]
     },
     "Sopin": {
         "schedule options": {},
@@ -23,6 +27,15 @@
             "DEF103",
             "DEF104",
             "DEF105"
+        ]
+    },
+    "Vene": {
+        "schedule options": {},
+        "subjects": [
+            "DEF102",
+            "DEF103",
+            "DEF104",
+            "DEF107"
         ]
     }
 }

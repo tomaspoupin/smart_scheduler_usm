@@ -58,7 +58,7 @@ class Schedule:
         'Fri': [0,0,0,0,0,0,0],
         'Sat': [0,0,0,0,0,0,0]}
 
-    def get_data(self):
+    def get_dict(self):
         return copy.deepcopy(self.data)
 
 class Subject:

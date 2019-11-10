@@ -7,7 +7,7 @@ class User_window:
         self.children = {}
     
     def grid(self):
-        self.frame.grid()
+        self.frame.grid(sticky='wens')
 
     def add_children(self, **kwargs):
         for child in kwargs:
