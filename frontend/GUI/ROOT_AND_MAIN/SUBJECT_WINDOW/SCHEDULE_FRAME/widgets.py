@@ -83,12 +83,14 @@ class Schedule_frame:
     # CALLBACKS
     def load_schedule(self, subject, section):
         current_schedule = callbacks.load_schedule(subject, section)
+        blocks_range = range(len(self.schedule_dict['Mon']))
         for day in self.schedule_dict:
-            for block_index in range(len(day)):
+            for block_index in blocks_range:
                 self.schedule_dict[day][block_index].set(current_schedule[day][block_index])
     
     def clear_schedule(self):
+        blocks_range = range(len(self.schedule_dict['Mon']))
         for day in self.schedule_dict:
-            for block_index in range(len(day)):
+            for block_index in blocks_range: 
                 self.schedule_dict[day][block_index].set(0)
 

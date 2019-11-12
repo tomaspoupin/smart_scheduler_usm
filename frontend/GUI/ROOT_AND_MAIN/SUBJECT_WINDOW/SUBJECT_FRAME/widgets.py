@@ -69,9 +69,17 @@ class Subject_frame:
         self.comboboxes['subject code']['widget'].bind(
             "<<ComboboxSelected>>", self.subject_selected_callback
             )
+        # Set subjects combobox write event
+        self.comboboxes['subject code']['widget'].bind(
+            "<KeyRelease>", self.subject_write_callback
+            )
         # Set sections combobox selection event
         self.comboboxes['section']['widget'].bind(
             "<<ComboboxSelected>>", self.section_selected_callback
+            )
+        # Set sections combobox selection event
+        self.comboboxes['section']['widget'].bind(
+            "<KeyRelease>", self.section_write_callback
             )
 
     def grid(self):
@@ -102,25 +110,72 @@ class Subject_frame:
             schedule_dictionary[day]=self.intvar_list_to_binary_list(variable_dictionary[day])
         return schedule_dictionary
 
-    # CALLBACKS
+    # COMBOBOX EVENT CALLBACKS
     def subject_selected_callback(self, ve):
         self.current_subject = self.comboboxes['subject code']['textvariable'].get()
         self.comboboxes['section']['widget']['values']=callbacks.get_section_list(self.current_subject)
-        self.comboboxes['section']['textvariable'].set('')
-        self.current_section = None
+        self.comboboxes['section']['textvariable'].set(self.comboboxes['section']['widget']['values'][0])
+        self.current_section = self.comboboxes['section']['widget']['values'][0]
         self.parent.children['schedule_child'].clear_schedule()
 
-        if not (self.current_subject is None) and not (self.current_section is None):
+        if (self.current_subject is not None) and (self.current_section is not None):
             self.parent.children['schedule_child'].load_schedule(
                 self.current_subject, self.current_section)
+    
+    def subject_write_callback(self, ve):
+        #print('Escribiste algo en el ramo')
+        subject_list = callbacks.get_subject_list()
+        if self.comboboxes['subject code']['textvariable'].get() in subject_list:
+            self.current_subject = self.comboboxes['subject code']['textvariable'].get()
+
+            section_list = callbacks.get_section_list(self.current_subject)
+            self.comboboxes['section']['widget']['values'] = section_list
+            self.current_section = self.comboboxes['section']['widget']['values'][0]
+            self.comboboxes['section']['textvariable'].set(
+                    self.current_section
+                )
+        else:
+            self.current_subject = None
+            self.current_section = None
+            self.comboboxes['section']['textvariable'].set('')
+        if (self.current_subject is not None) and (self.current_section is not None):
+            self.parent.children['schedule_child'].load_schedule(
+                self.current_subject, self.current_section)
+        else:
+            self.parent.children['schedule_child'].clear_schedule()
+    
     
     def section_selected_callback(self, ve):
         self.current_section = self.comboboxes['section']['textvariable'].get()
         self.parent.children['schedule_child'].clear_schedule()
-        if not (self.current_subject is None) and not (self.current_section is None):
+        if (self.current_subject is not None) and (self.current_section is not None):
             self.parent.children['schedule_child'].load_schedule(
                 self.current_subject, self.current_section)
 
+    def section_write_callback(self, ve):
+        #print('Escribiste algo en el paralelo')
+        section = self.comboboxes['section']['textvariable'].get().strip()
+        if section.isdigit() or section == '':
+            subject_list = callbacks.get_subject_list()
+            if self.comboboxes['subject code']['textvariable'].get() in subject_list:   
+                self.current_section = section
+                self.parent.children['schedule_child'].clear_schedule()
+                section_list = callbacks.get_section_list(self.current_subject)
+                if (self.current_subject is not None) and (self.current_section is not None) and (self.current_section in section_list):
+                    self.parent.children['schedule_child'].load_schedule(
+                        self.current_subject, self.current_section)
+        else:
+            
+            messagebox.showinfo(
+                    title='Paralelo',
+                    message='El paralelo debe ser un número entero'
+                )
+            while (not section.isdigit()) and (not section==''):
+                section = section[slice(len(section)-1)]
+            self.comboboxes['section']['textvariable'].set(section)
+
+
+    #CALLBACKS
     def new_schedule_option(self):
         schedule_dictionary = self.get_schedule_dict()
         subject_code = self.comboboxes['subject code']['textvariable'].get()
