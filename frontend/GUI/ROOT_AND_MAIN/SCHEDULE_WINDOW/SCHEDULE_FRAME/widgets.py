@@ -158,7 +158,7 @@ class Schedule_frame:
                     block_color = "white"
                 elif self.current_schedule_dict[day][block_index]==1:
                     block_color = "#ff9900"
-                    text = subject_options[0]
+                    text = subject_options[0].split('_')[0]
                 else:
                     block_color = "#ff6600"
                     text='{} TOPE(s)'.format(len(subject_options)-1)

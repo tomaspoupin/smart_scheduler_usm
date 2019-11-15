@@ -17,6 +17,13 @@ def setup():
     root_and_main_container.window_manager.add(window2.frame, text="Ramos")
     root_and_main_container.window_manager.add(window3.frame, text="Horarios")
 
+    root_and_main_container.add_children(
+        user_window_child=window1,
+        subject_window_child=window2,
+        schedule_window_child=window3
+        )
+
+    root_and_main_container.set_events()
     root_and_main_container.grid()
 
 def run():

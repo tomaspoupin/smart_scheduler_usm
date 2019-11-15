@@ -92,9 +92,11 @@ class Selection_frame:
                 self.comboboxes['options']['items'][0]
             )
         self.update_schedule()
+        self.parent.children['info_child'].update_gui_info_to_current_user_option()
 
     def options_selected_callback(self, ve):
         self.update_schedule()
+        self.parent.children['info_child'].update_gui_info_to_current_user_option()
 
     def update_schedule(self):
         self.parent.children['schedule_child'].set_current_schedule_dict()

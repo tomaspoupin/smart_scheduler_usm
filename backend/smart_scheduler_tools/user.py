@@ -140,6 +140,9 @@ class User:
     def get_name(self):
         return self.name
 
+    def get_schedule_options_as_dict(self):
+        return self.schedule_options
+
     def has_schedule_options(self):
         if self.schedule_options:
             return True

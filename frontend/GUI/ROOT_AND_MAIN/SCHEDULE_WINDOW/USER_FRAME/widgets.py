@@ -100,18 +100,23 @@ class User_frame:
                 widget_callbacks.calculate_schedule_options(user)
                 self.set_schedule_options_to_current_user()
                 self.parent.children['selection_child'].update_schedule()
+                self.parent.children['info_child'].update_user_info(self.current_user)
+                self.parent.children['info_child'].update_gui_info_to_current_user_option()
                 return
         new_user = user_tools.User(self.current_user)
         self.users.append(new_user)
         widget_callbacks.calculate_schedule_options(new_user)
         self.set_schedule_options_to_current_user()
-        self.parent.children['selection_child'].update_schedule()        
+        self.parent.children['selection_child'].update_schedule()
+        self.parent.children['info_child'].update_user_info(self.current_user)
+        self.parent.children['info_child'].update_gui_info_to_current_user_option()
 
     def user_selected_callback(self, ve):
         self.current_user = \
             self.comboboxes['user']['textvariable'].get()
         self.set_schedule_options_to_current_user()
-        self.parent.children['selection_child'].update_schedule()        
+        self.parent.children['selection_child'].update_schedule()   
+        self.parent.children['info_child'].update_gui_info_to_current_user_option()
     
     def set_schedule_options_to_current_user(self):
         self.parent.children['selection_child'].comboboxes['overlaps']['items'] = []
