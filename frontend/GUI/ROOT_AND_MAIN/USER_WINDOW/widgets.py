@@ -4,6 +4,7 @@ from tkinter import ttk
 class User_window: 
     def __init__(self, parent):
         self.frame = ttk.Frame(parent)
+        self.parent = parent
         self.children = {}
     
     def grid(self):

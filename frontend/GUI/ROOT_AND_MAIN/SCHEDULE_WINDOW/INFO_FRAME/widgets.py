@@ -178,8 +178,9 @@ class Info_frame:
     # Title frame
     def set_gui_title_frame(self):
         current_user_object = self.get_user_object(self.get_current_user())
-        self.labels['title']['text'] = 'INFORMACIÓN DE ' + self.get_current_user().upper()
-        self.labels['title']['widget']['text'] = self.labels['title']['text']
+        if current_user_object is not None:
+            self.labels['title']['text'] = 'INFORMACIÓN DE ' + self.get_current_user().upper()
+            self.labels['title']['widget']['text'] = self.labels['title']['text']
         if current_user_object is None:
             self.labels['title']['hide'] = True
             self.labels['hide info']['hide'] = True
@@ -341,7 +342,6 @@ class Info_frame:
                     self.labels[overlap_label_name]['widget'] = tk.Label(
                         self.info_frame, text='', bg='white'
                     )
-                print(overlaped_subjects_tuple)
                 overlap_str = ''
                 for overlaped_subject in overlaped_subjects_tuple:
                     overlap_str = overlap_str + overlaped_subject.split('_')[0] + ', '
@@ -511,6 +511,8 @@ class Info_frame:
 
     def set_gui_info_frame(self):
         user_info = self.get_current_user_info_dict()
+        if not user_info:
+            return
         overlaps = \
             self.parent.children['selection_child'].comboboxes['overlaps']['textvariable'].get()
         option = \
@@ -520,6 +522,8 @@ class Info_frame:
         self.set_current_user_label_table(user_info, overlaps, option)
 
     def grid_gui_info_frame(self):
+        if self.get_current_user() is None:
+            return
         self.grid_subject_number()
         self.grid_current_user_label_table()
 

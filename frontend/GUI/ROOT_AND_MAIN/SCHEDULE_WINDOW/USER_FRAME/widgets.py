@@ -75,8 +75,6 @@ class User_frame:
             "<<ComboboxSelected>>",
             self.user_selected_callback
             )
-        self.frame.bind("<Visibility>", self.update_frame)
-
         self.set_schedule_options_to_current_user()
 
     def grid(self):
@@ -159,7 +157,25 @@ class User_frame:
                     )
                 return
     
-    def update_frame(self, ve):
-        self.comboboxes['user']['items'] = json_callbacks.get_user_list()
+    def update_user_frame(self):
+        user_list = json_callbacks.get_user_list()
+        self.comboboxes['user']['items'] = user_list
         self.comboboxes['user']['widget']['values'] = \
             self.comboboxes['user']['items']
+
+        if not user_list:
+            self.comboboxes['user']['textvariable'].set('')
+            self.current_user = None
+        else:
+            if self.current_user not in user_list:
+                self.current_user = user_list[0]
+                self.comboboxes['user']['textvariable'].set(user_list[0])
+
+        for user_index in range(len(self.users)):
+            if self.users[user_index].get_name() not in user_list:
+                del self.users[user_index]
+
+        self.set_schedule_options_to_current_user()
+        self.parent.children['selection_child'].update_schedule()
+        self.parent.children['info_child'].update_user_info(self.current_user)
+        self.parent.children['info_child'].update_gui_info_to_current_user_option()

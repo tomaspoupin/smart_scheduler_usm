@@ -2,6 +2,11 @@ import os
 import sys
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+database_path = '../database_files'
+# create database file if not exists
+if not os.path.isdir(os.path.join(BASE_DIR, database_path)):
+    os.mkdir(database_path)
+
 # packages path
 rel_gui_path = "../frontend/"
 abs_gui_path = os.path.join(BASE_DIR, rel_gui_path)

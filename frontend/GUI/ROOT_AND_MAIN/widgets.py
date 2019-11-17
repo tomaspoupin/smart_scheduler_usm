@@ -24,6 +24,9 @@ class Root_and_main:
         self.window_manager.bind('<<NotebookTabChanged>>', self.tab_change_callback)
 
     def tab_change_callback(self, ve):
+        tab_index = self.window_manager.index(self.window_manager.select())
+        if tab_index == 2:
+            self.children['schedule_window_child'].children['user_child'].update_user_frame()    
         if self.children['schedule_window_child'].children['info_child'].hide_info == False:
             self.children['schedule_window_child'].children['info_child'].change_info_frame_visibility()
 

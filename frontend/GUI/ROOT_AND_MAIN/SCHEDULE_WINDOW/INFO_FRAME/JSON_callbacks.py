@@ -22,3 +22,16 @@ def get_user_subjects_list(user):
     except:
         return -1
     return users[user]['subjects']
+
+def get_user_list():
+    users = {}
+    try:
+        with open(abs_users_database_path) as users_database:
+            users = json.load(users_database)
+    except FileNotFoundError:
+        return -2
+    except ValueError:
+        return -2
+    except:
+        return -1
+    return list(users.keys())

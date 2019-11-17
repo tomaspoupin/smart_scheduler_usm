@@ -101,6 +101,8 @@ class Subject_frame:
     # CALLBACKS
 
     def subscribe_button_callback(self):
+        if self.get_current_user() is None:
+            return
         selection = \
             self.lists['possible subjects']['widget'].get(tk.ANCHOR)
         if not selection:
@@ -124,6 +126,8 @@ class Subject_frame:
             )
     
     def unsubscribe_button_callback(self):
+        if self.get_current_user() is None:
+            return
         selection = \
             self.lists['subscribed subjects']['widget'].get(tk.ANCHOR)
         if not selection:
